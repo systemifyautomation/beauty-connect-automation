@@ -85,7 +85,8 @@ Quick reference guide for developers:
 For questions or issues:
 - Review [STRATEGY.md](./STRATEGY.md) for detailed workflow information
 - Check [SETUP-GUIDE.md](./SETUP-GUIDE.md) for configuration help
-- Contact Systemify Automation support
+- Check [QUICK-REFERENCE.md](./QUICK-REFERENCE.md) for troubleshooting
+- Contact Systemify Automation: support@systemifyautomation.com
 
 ## Partners
 

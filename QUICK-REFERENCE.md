@@ -290,7 +290,7 @@ Looking forward to connecting with you! 💄✨
 - **Make.com Support**: https://www.make.com/en/help/support
 - **GoHighLevel Help**: https://help.gohighlevel.com/
 - **Shopify Support**: https://help.shopify.com/
-- **Systemify Automation**: Contact via GitHub repository issues or Beauty Connect team
+- **Systemify Automation**: support@systemifyautomation.com
 
 ## Useful Links
 
