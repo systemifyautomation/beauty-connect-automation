@@ -1,0 +1,606 @@
+{
+  "name": "Shopify Lead to GoHighLevel & WhatsApp",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 1,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "hook": {
+              "label": "Shopify Lead Approval Webhook"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook",
+            "label": "Webhook",
+            "required": true
+          }
+        ],
+        "interface": [
+          {
+            "name": "customer_id",
+            "label": "Customer ID",
+            "type": "text"
+          },
+          {
+            "name": "first_name",
+            "label": "First Name",
+            "type": "text"
+          },
+          {
+            "name": "last_name",
+            "label": "Last Name",
+            "type": "text"
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "email"
+          },
+          {
+            "name": "phone",
+            "label": "Phone",
+            "type": "text"
+          },
+          {
+            "name": "tags",
+            "label": "Tags",
+            "type": "text"
+          },
+          {
+            "name": "created_at",
+            "label": "Created At",
+            "type": "date"
+          },
+          {
+            "name": "updated_at",
+            "label": "Updated At",
+            "type": "date"
+          },
+          {
+            "name": "total_spent",
+            "label": "Total Spent",
+            "type": "number"
+          },
+          {
+            "name": "orders_count",
+            "label": "Orders Count",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 3,
+              "module": "util:SetVariables",
+              "version": 1,
+              "parameters": {},
+              "mapper": {
+                "variables": [
+                  {
+                    "name": "firstName",
+                    "value": "{{1.first_name}}"
+                  },
+                  {
+                    "name": "lastName",
+                    "value": "{{1.last_name}}"
+                  },
+                  {
+                    "name": "email",
+                    "value": "{{1.email}}"
+                  },
+                  {
+                    "name": "phone",
+                    "value": "{{1.phone}}"
+                  },
+                  {
+                    "name": "shopifyCustomerId",
+                    "value": "{{1.customer_id}}"
+                  },
+                  {
+                    "name": "shopifyTags",
+                    "value": "{{1.tags}}"
+                  },
+                  {
+                    "name": "totalSpent",
+                    "value": "{{1.total_spent}}"
+                  },
+                  {
+                    "name": "ordersCount",
+                    "value": "{{1.orders_count}}"
+                  },
+                  {
+                    "name": "approvalDate",
+                    "value": "{{now}}"
+                  }
+                ],
+                "scope": "roundtrip"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": -150
+                },
+                "restore": {
+                  "expect": {
+                    "variables": {
+                      "items": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                      ]
+                    },
+                    "scope": {
+                      "label": "One cycle"
+                    }
+                  }
+                },
+                "expect": [
+                  {
+                    "name": "variables",
+                    "type": "array",
+                    "label": "Variables",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "label": "Variable name",
+                        "type": "text",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "label": "Variable value",
+                        "type": "any"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "scope",
+                    "type": "select",
+                    "label": "Variable lifetime",
+                    "required": true,
+                    "validate": {
+                      "enum": [
+                        "roundtrip",
+                        "execution"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": 4,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": {
+                "handleErrors": true,
+                "useNewZLibDeCompress": true
+              },
+              "mapper": {
+                "url": "https://rest.gohighlevel.com/v1/contacts/",
+                "serializeUrl": false,
+                "method": "post",
+                "headers": [
+                  {
+                    "name": "Authorization",
+                    "value": "Bearer {{YOUR_GOHIGHLEVEL_API_KEY}}"
+                  },
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "qs": [],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "authUser": "",
+                "authPass": "",
+                "timeout": "",
+                "shareCookies": false,
+                "ca": "",
+                "rejectUnauthorized": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "gzip": true,
+                "useMtls": false,
+                "contentType": "application/json",
+                "data": "{\n  \"firstName\": \"{{3.firstName}}\",\n  \"lastName\": \"{{3.lastName}}\",\n  \"email\": \"{{3.email}}\",\n  \"phone\": \"{{3.phone}}\",\n  \"tags\": [\"shopify-lead\", \"approved\", \"beauty-connect\"],\n  \"source\": \"Shopify Automation\",\n  \"customField\": {\n    \"shopify_customer_id\": \"{{3.shopifyCustomerId}}\",\n    \"shopify_tags\": \"{{3.shopifyTags}}\",\n    \"total_spent\": \"{{3.totalSpent}}\",\n    \"orders_count\": \"{{3.ordersCount}}\",\n    \"approval_date\": \"{{3.approvalDate}}\",\n    \"lead_source\": \"Shopify\"\n  }\n}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": -150
+                },
+                "restore": {
+                  "expect": {
+                    "method": {
+                      "mode": "chose",
+                      "label": "POST"
+                    },
+                    "headers": {
+                      "items": [
+                        null,
+                        null
+                      ]
+                    },
+                    "qs": {
+                      "mode": "chose"
+                    },
+                    "bodyType": {
+                      "label": "Raw"
+                    },
+                    "contentType": {
+                      "label": "JSON (application/json)"
+                    }
+                  },
+                  "parameters": {
+                    "handleErrors": {
+                      "collapsed": true
+                    },
+                    "useNewZLibDeCompress": {
+                      "collapsed": true
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "handleErrors",
+                    "type": "boolean",
+                    "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                    "required": true
+                  },
+                  {
+                    "name": "useNewZLibDeCompress",
+                    "type": "boolean",
+                    "label": "Use new zlib decompression",
+                    "required": true
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL",
+                    "required": true
+                  },
+                  {
+                    "name": "serializeUrl",
+                    "type": "boolean",
+                    "label": "Serialize URL",
+                    "required": true
+                  },
+                  {
+                    "name": "method",
+                    "type": "select",
+                    "label": "Method",
+                    "required": true,
+                    "validate": {
+                      "enum": [
+                        "get",
+                        "post",
+                        "put",
+                        "patch",
+                        "delete",
+                        "options"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "headers",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Headers"
+                  },
+                  {
+                    "name": "qs",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Query String"
+                  },
+                  {
+                    "name": "bodyType",
+                    "type": "select",
+                    "label": "Body type",
+                    "validate": {
+                      "enum": [
+                        "raw",
+                        "x_www_form_urlencoded",
+                        "multipart_form_data"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "parseResponse",
+                    "type": "boolean",
+                    "label": "Parse response",
+                    "required": true
+                  },
+                  {
+                    "name": "contentType",
+                    "type": "select",
+                    "label": "Content type",
+                    "validate": {
+                      "enum": [
+                        "text/plain",
+                        "application/json",
+                        "application/xml",
+                        "text/xml",
+                        "text/html",
+                        "custom"
+                      ]
+                    }
+                  },
+                  {
+                    "name": "data",
+                    "type": "buffer",
+                    "label": "Request content"
+                  }
+                ]
+              }
+            },
+            {
+              "id": 5,
+              "module": "util:SetVariables",
+              "version": 1,
+              "parameters": {},
+              "mapper": {
+                "variables": [
+                  {
+                    "name": "ghlContactId",
+                    "value": "{{4.data.contact.id}}"
+                  },
+                  {
+                    "name": "ghlContactPhone",
+                    "value": "{{4.data.contact.phone}}"
+                  }
+                ],
+                "scope": "roundtrip"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": -150
+                },
+                "restore": {
+                  "expect": {
+                    "variables": {
+                      "items": [
+                        null,
+                        null
+                      ]
+                    },
+                    "scope": {
+                      "label": "One cycle"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 6,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": {
+                "handleErrors": true,
+                "useNewZLibDeCompress": true
+              },
+              "mapper": {
+                "url": "https://rest.gohighlevel.com/v1/conversations/messages",
+                "serializeUrl": false,
+                "method": "post",
+                "headers": [
+                  {
+                    "name": "Authorization",
+                    "value": "Bearer {{YOUR_GOHIGHLEVEL_API_KEY}}"
+                  },
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "qs": [],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "authUser": "",
+                "authPass": "",
+                "timeout": "",
+                "shareCookies": false,
+                "ca": "",
+                "rejectUnauthorized": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "gzip": true,
+                "useMtls": false,
+                "contentType": "application/json",
+                "data": "{\n  \"type\": \"WhatsApp\",\n  \"contactId\": \"{{5.ghlContactId}}\",\n  \"message\": \"Hi {{3.firstName}}! 👋\\n\\nThank you for your interest in Beauty Connect! We're excited to help you discover amazing beauty products.\\n\\nOur team has reviewed your profile and we'd love to chat with you about personalized recommendations. When would be a good time for a quick conversation?\\n\\nLooking forward to connecting with you! 💄✨\"\n}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": -150
+                },
+                "restore": {
+                  "expect": {
+                    "method": {
+                      "mode": "chose",
+                      "label": "POST"
+                    },
+                    "headers": {
+                      "items": [
+                        null,
+                        null
+                      ]
+                    },
+                    "qs": {
+                      "mode": "chose"
+                    },
+                    "bodyType": {
+                      "label": "Raw"
+                    },
+                    "contentType": {
+                      "label": "JSON (application/json)"
+                    }
+                  },
+                  "parameters": {
+                    "handleErrors": {
+                      "collapsed": true
+                    },
+                    "useNewZLibDeCompress": {
+                      "collapsed": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 7,
+              "module": "util:SetVariable",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Error Handler - Log Failed Execution",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{4.statusCode}}",
+                      "o": "number:notequal",
+                      "b": "200",
+                      "t": "number"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "name": "errorLog",
+                "scope": "roundtrip",
+                "value": "{\n  \"timestamp\": \"{{now}}\",\n  \"error\": \"Failed to create contact in GoHighLevel\",\n  \"statusCode\": \"{{4.statusCode}}\",\n  \"response\": \"{{4.data}}\",\n  \"customerData\": {\n    \"email\": \"{{1.email}}\",\n    \"phone\": \"{{1.phone}}\",\n    \"name\": \"{{1.first_name}} {{1.last_name}}\"\n  }\n}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": 150
+                },
+                "restore": {
+                  "expect": {
+                    "scope": {
+                      "label": "One cycle"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
+  },
+  "notes": [
+    {
+      "id": "note1",
+      "text": "CONFIGURATION REQUIRED:\n\n1. Replace {{YOUR_GOHIGHLEVEL_API_KEY}} with your actual GoHighLevel API key in modules 4 and 6\n\n2. Configure Shopify webhook:\n   - Go to Shopify Admin > Settings > Notifications > Webhooks\n   - Create webhook for 'Customer creation' or 'Customer update'\n   - Set webhook URL to the Make.com webhook URL from module 1\n   - Add webhook authentication if required\n\n3. Test the scenario:\n   - Use 'Run once' to generate the webhook URL\n   - Send a test webhook from Shopify or use Make.com's webhook tester\n   - Verify contact creation in GoHighLevel\n   - Check WhatsApp message delivery\n\n4. Customize the WhatsApp message template in module 6 to match your brand voice\n\n5. Adjust error handling in module 7 as needed (e.g., send to Google Sheets, email notification, etc.)",
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 300,
+          "width": 600,
+          "height": 400
+        }
+      }
+    },
+    {
+      "id": "note2",
+      "text": "DATA FLOW:\n\n1. Shopify webhook triggers when lead is approved\n2. Data is extracted and stored in variables\n3. HTTP request creates/updates contact in GoHighLevel\n4. Contact ID is extracted from response\n5. WhatsApp message is sent via GoHighLevel\n6. Error handling logs any failures",
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": -300,
+          "width": 400,
+          "height": 200
+        }
+      }
+    }
+  ]
+}
