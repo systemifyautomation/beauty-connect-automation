@@ -239,7 +239,7 @@
                 "gzip": true,
                 "useMtls": false,
                 "contentType": "application/json",
-                "data": "{\n  \"firstName\": \"{{3.firstName}}\",\n  \"lastName\": \"{{3.lastName}}\",\n  \"email\": \"{{3.email}}\",\n  \"phone\": \"{{3.phone}}\",\n  \"tags\": [\"shopify-lead\", \"approved\", \"beauty-connect\"],\n  \"source\": \"Shopify Automation\",\n  \"customField\": {\n    \"shopify_customer_id\": \"{{3.shopifyCustomerId}}\",\n    \"shopify_tags\": \"{{3.shopifyTags}}\",\n    \"total_spent\": \"{{3.totalSpent}}\",\n    \"orders_count\": \"{{3.ordersCount}}\",\n    \"approval_date\": \"{{3.approvalDate}}\",\n    \"lead_source\": \"Shopify\"\n  }\n}"
+                "data": "{\n  \"firstName\": \"{{3.firstName}}\",\n  \"lastName\": \"{{3.lastName}}\",\n  \"email\": \"{{3.email}}\",\n  \"phone\": \"{{3.phone}}\",\n  \"tags\": [\"shopify-lead\", \"approved\", \"beauty-connect\"],\n  \"source\": \"Shopify Automation\",\n  \"customFields\": {\n    \"shopify_customer_id\": \"{{3.shopifyCustomerId}}\",\n    \"shopify_tags\": \"{{3.shopifyTags}}\",\n    \"total_spent\": \"{{3.totalSpent}}\",\n    \"orders_count\": \"{{3.ordersCount}}\",\n    \"approval_date\": \"{{3.approvalDate}}\",\n    \"lead_source\": \"Shopify\"\n  }\n}"
               },
               "metadata": {
                 "designer": {
