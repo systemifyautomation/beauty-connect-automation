@@ -38,6 +38,24 @@ Step-by-step setup instructions covering:
 - Testing and verification procedures
 - Troubleshooting common issues
 
+### 🔄 [WORKFLOW-DIAGRAM.md](./WORKFLOW-DIAGRAM.md)
+Visual workflow documentation including:
+- Complete flow diagram from Shopify to WhatsApp
+- Data mapping between systems
+- Module-by-module breakdown
+- Error handling scenarios
+- Performance metrics and timing
+- Integration architecture
+
+### ⚡ [QUICK-REFERENCE.md](./QUICK-REFERENCE.md)
+Quick reference guide for developers:
+- Essential configuration values
+- API endpoints and scopes
+- Testing commands
+- Common troubleshooting fixes
+- Variable references
+- Maintenance checklist
+
 ## Quick Start
 
 1. **Read the Strategy** - Review [STRATEGY.md](./STRATEGY.md) to understand the automation workflow
